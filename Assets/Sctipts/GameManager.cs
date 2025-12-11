@@ -3,11 +3,9 @@ using R3;
 
 public class GameManager : MonoBehaviour
 {
-    private PitchEventDetector pitchEventDetector;
+    [SerializeField]private PitchEventDetector pitchEventDetector;
 
     private CompositeDisposable disposable;
-    
-    [SerializeField] private AudioSource audioSource;
     
     [SerializeField] private AnimationController animationController;
     [SerializeField] private ParticleController particleController;
@@ -18,7 +16,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        pitchEventDetector = new PitchEventDetector(audioSource);
         disposable = new CompositeDisposable();
         
         Bind();

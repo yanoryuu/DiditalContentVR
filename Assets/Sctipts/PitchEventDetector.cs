@@ -1,7 +1,7 @@
 using System;
 using R3;
 using UnityEngine;
-public class PitchEventDetector : IDisposable
+public class PitchEventDetector : MonoBehaviour
 {
     [Header("解析設定")]
     [Tooltip("FFT に使うサンプル数 (2のべき乗). 1024 or 2048 あたりがおすすめ")]
@@ -15,10 +15,10 @@ public class PitchEventDetector : IDisposable
     public float midMaxHz = 1000f;    // 〜1000Hz を中音
     // それ以上を高音とする
 
-    [Header("イベント")]
-    public Subject<Unit> lowEvent { get; private set; }
-    public Subject<Unit> midEvent { get; private set; }
-    public Subject<Unit> highEvent { get; private set; }
+    [Header("イベント")] 
+    public Subject<Unit> lowEvent = new Subject<Unit>();
+    public Subject<Unit> midEvent = new Subject<Unit>();
+    public Subject<Unit> highEvent  = new Subject<Unit>();
     
     public AudioSource _audioSource;
     private float[] _spectrum;
@@ -27,16 +27,13 @@ public class PitchEventDetector : IDisposable
     public float CurrentPitchHz { get; private set; }  // 現在推定しているピッチ
 
     
-    public PitchEventDetector(AudioSource audioSource)
+    public void Awake()
     {
-        _audioSource = audioSource;
         _spectrum = new float[sampleSize];
         _sampleRate = AudioSettings.outputSampleRate;
-        
-        lowEvent = new Subject<Unit>();
-        midEvent = new Subject<Unit>();
-        highEvent = new Subject<Unit>();
     }
+    
+    
     
     public void DetectPitchAndInvokeEvents()
     {
